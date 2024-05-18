@@ -1,6 +1,24 @@
 --- printer_ui-orig/printerui/qml/printer/PrintListener.qml
 +++ printer_ui/printerui/qml/printer/PrintListener.qml
-@@ -39,6 +39,10 @@
+@@ -5,8 +5,16 @@
+ 
+     property bool printing: PrintManager.currentTask.stage >= PrintTask.WORKING
+     property var printState: PrintManager.currentTask.state
+-
++    property var layerNum: PrintManager.currentTask.layerNum
++    
++    onLayerNumChanged:{
++        console.log("[x1p] - Layer number ", layerNum, PrintManager.currentTask.totalLayerNum);
++    }
++    onPrintStateChanged: {
++        console.log("[x1p] - Print state ", printState); 
++    }
+     onPrintingChanged: {
++        console.log("[x1p] - Printing ", printing); 
+         DeviceManager.power.externalWakeup()
+     }
+ 
+@@ -39,6 +47,10 @@
                  }
              }
  
