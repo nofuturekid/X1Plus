@@ -77,16 +77,37 @@ var printerConfigDir = null;
 var emulating = _X1PlusNative.getenv("EMULATION_WORKAROUNDS");
 X1Plus.emulating = emulating;
 
-
-function isIdle() {
-	return PrintManager.currentTask.stage < PrintTask.WORKING;
+var [printState, printStateChanged, _setPrintState] = Binding.makeBinding(-1);
+var [layerNum, layerNumChanged, _setLayerNum] = Binding.makeBinding(-1);
+var [totalLayerNum, totalLayerNumChanged, _setTotalLayerNum] = Binding.makeBinding(-1);
+const printStates = {
+	IDLE: 0,
+	SLICING: 1,
+	PAUSED: 2,
+	RUNNING: 3,
+	FINISH: 4,
+	FAILED: 5,
 }
-X1Plus.isIdle = isIdle;
-
-function hasSleep() {
-	return DeviceManager.power.hasSleep;
+function onLayerChanged(layer,totalLayer){
+	_setLayerNum(layer);
+	_setTotalLayerNum(totalLayer);
+	console.log("[x1p] onLayerChanged: ", layer, totalLayer);
 }
-X1Plus.hasSleep = hasSleep;
+X1Plus.onLayerChanged = onLayerChanged;
+
+function onStateChanged(state){
+	/*
+	0: PrintTask.IDLE
+	1: PrintTask.SLICING
+	2: PrintTask.PAUSED
+	3: PrintTask.RUNNING
+	4: PrintTask.FINISH
+	5: PrintTask.FAILED
+	*/
+	_setPrintState(state);
+	console.log("[x1p] onStateChanged:  ", state);
+}
+X1Plus.onStateChanged = onStateChanged;
 
 function loadJson(path) {
 	let xhr = new XMLHttpRequest();
