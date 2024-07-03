@@ -14,7 +14,6 @@
 .import "./x1plus/TempGraph.js" as X1PlusTempGraph
 .import "./x1plus/OTA.js" as X1PlusOTA
 .import "./x1plus/Network.js" as X1PlusNetwork
-.import "./x1plus/Printer.js" as X1PlusPrinter
 
 /* Back-end model logic for X1Plus's UI
  *
@@ -64,8 +63,6 @@ X1Plus.OTA = X1PlusOTA;
 var OTA = X1PlusOTA;
 X1Plus.Network = X1PlusNetwork;
 var Network = X1PlusNetwork;
-X1Plus.Printer = X1PlusPrinter;
-var Printer = X1PlusPrinter;
 
 Stats.X1Plus = X1Plus;
 DDS.X1Plus = X1Plus;
@@ -77,7 +74,6 @@ Settings.X1Plus = X1Plus;
 TempGraph.X1Plus = X1Plus;
 OTA.X1Plus = X1Plus;
 Network.X1Plus = X1Plus;
-Printer.X1Plus = X1Plus;
 
 var _DdsListener = JSDdsListener.DdsListener;
 var _X1PlusNative = JSX1PlusNative.X1PlusNative;
@@ -141,6 +137,29 @@ function fileExists(fPath) {
 }
 X1Plus.fileExists = fileExists;
 
+_LayerUpdate = null;
+_PrintStateUpdate = null;
+
+function onStateChanged(a) {
+	try{
+		_PrintStateUpdate({["state"]: a});
+	} catch (e) {
+		console.log(e)
+	}		
+}
+X1Plus.onStateChanged = onStateChanged;
+
+function onLayerChanged(a, b) {
+	try {
+		_LayerUpdate({
+			["layerNum"]: a,
+			["totalLayerNum"]: b
+		});
+	} catch (e) {
+		console.log(e)
+	}
+}
+X1Plus.onLayerChanged = onLayerChanged;
 /* Some things can only happen after we have a DeviceManager and
  * PrintManager passed down, and the real QML environment is truly alive. 
  * Submodules also don't get access to the global X1Plus object until after
@@ -158,15 +177,14 @@ function awaken(_DeviceManager, _PrintManager, _NetworkManager, _PrintTask, _Net
 	_X1PlusNative.system("mkdir -p " + _X1PlusNative.getenv("EMULATION_WORKAROUNDS") + printerConfigDir);
 	Settings.awaken();
 	OTA.awaken();
-	console.log("1234 loaded OTA")
-	Printer.awaken();
 	BedMeshCalibration.awaken();
 	ShaperCalibration.awaken();
 	GpioKeys.awaken();
 	TempGraph.awaken();
 	Network.awaken();
 	console.log("X1Plus.js is awake");
-	
+	_LayerUpdate = X1Plus.DBus.proxyFunction("x1plus.x1plusd", "/x1plus/status", "x1plus.status", "Layer");
+	_PrintStateUpdate = X1Plus.DBus.proxyFunction("x1plus.x1plusd", "/x1plus/status", "x1plus.status", "State");
 }
 
 

@@ -149,7 +149,6 @@
 +<file>printerui/qml/x1plus/ShaperCalibration.js</file>
 +<file>printerui/qml/x1plus/Stats.js</file>
 +<file>printerui/qml/x1plus/TempGraph.js</file>
-+<file>printerui/qml/x1plus/Printer.js</file>
  <file>printerui/text/error_texts.de.json</file>
  <file>printerui/text/error_texts.en.json</file>
  <file>printerui/text/error_texts.es.json</file>

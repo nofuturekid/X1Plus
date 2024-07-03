@@ -16,11 +16,11 @@
          DeviceManager.power.externalWakeup()
      }
 +    onLayerNumChanged:{
-+        X1Plus.Printer.onLayerChanged(layerNum,PrintManager.currentTask.totalLayerNum); 
++        X1Plus.onLayerChanged(layerNum,PrintManager.currentTask.totalLayerNum); 
 +    }
 +
 +    onPrintStateChanged: {
-+        X1Plus.Printer.onStateChanged(printState);
++        X1Plus.onStateChanged(printState);
 +    }
  
      Shortcut {
