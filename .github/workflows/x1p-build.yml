@@ -65,16 +65,16 @@ jobs:
         prerelease: true
         files: |
           *.x1p
-    - name: upload OTA json
-      uses: dmnemec/copy_file_to_another_repo_action@main
-      if: startsWith(github.ref, 'refs/tags/x1plus/') 
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.OTA_UPLOAD_TOKEN_GITHUB }}
-      with:
-        source_file: 'ota.json'
-        destination_repo: 'X1Plus/ota.x1plus.net'
-        destination_folder: 'stable'
-        user_email: 'x1plus@x1plus.net'
-        user_name: 'OTAUploadBot'
-        commit_message: 'feat: upload x1plus release ${{ github.ref_name }}'
-        destination_branch_create: ${{ github.ref_name }}
+    # - name: upload OTA json
+    #   uses: dmnemec/copy_file_to_another_repo_action@main
+    #   if: startsWith(github.ref, 'refs/tags/x1plus/') 
+    #   env:
+    #     API_TOKEN_GITHUB: ${{ secrets.OTA_UPLOAD_TOKEN_GITHUB }}
+    #   with:
+    #     source_file: 'ota.json'
+    #     destination_repo: 'X1Plus/ota.x1plus.net'
+    #     destination_folder: 'stable'
+    #     user_email: 'x1plus@x1plus.net'
+    #     user_name: 'OTAUploadBot'
+    #     commit_message: 'feat: upload x1plus release ${{ github.ref_name }}'
+    #     destination_branch_create: ${{ github.ref_name }}
